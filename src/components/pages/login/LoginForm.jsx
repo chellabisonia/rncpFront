@@ -22,6 +22,7 @@ export default function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 variant="filled"
+                type="email"
             />
             <TextInput
                 label="Mot de passe"
@@ -41,7 +42,7 @@ export default function LoginForm() {
 const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
     padding: 24px;
     background-color: ${theme.colors.backgroundDark};
     width: 100%;
@@ -49,7 +50,7 @@ const FormContainer = styled.form`
 
     h1 {
         text-align: center;
-        font-family: 'Nunito', sans-serif;
+        font-family: ${theme.fonts.family};
         font-size: 24px;
         font-weight: bold;
         color: ${theme.colors.white};
@@ -62,7 +63,7 @@ const FormContainer = styled.form`
 
 
 const ForgotPassword = styled.a`
-    font-family: 'Nunito', sans-serif;
+    font-family: ${theme.fonts.family};
     font-size: 14px;
     color: ${theme.colors.white};
     text-decoration: none;

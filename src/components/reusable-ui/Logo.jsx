@@ -7,7 +7,7 @@ export default function Logo({ className, onClick }) {
     return (
         <LogoStyled className={className} onClick={onClick}>
             <FaHome className="home-logo" />
-            <h1>StayLocal</h1>
+            <h1>StayWithLocals</h1>
         </LogoStyled>
     );
 }
@@ -29,7 +29,7 @@ const LogoStyled = styled.div`
         color: ${theme.colors.white};
         font-size: ${theme.fonts.sizes.P2};
         line-height: ${theme.fonts.sizes.P3};
-        font-family: "Nunito", sans-serif;
+        font-family: ${theme.fonts.family};
         font-weight: bold;
         margin: 0;
     }
