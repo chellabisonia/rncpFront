@@ -22,7 +22,7 @@ const StyledButton = styled(Button)`
     cursor: pointer;
     border-radius: ${theme.borderRadius.extraRound};
     font-size: ${theme.fonts.sizes.SM};
-    font-family: 'Nunito';
+    font-family: ${theme.fonts.family};
     text-transform: none;
     padding: 8px 20px;
     min-width: 120px; /* évite trop petit */

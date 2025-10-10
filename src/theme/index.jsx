@@ -1,9 +1,10 @@
     const colors ={
-        nude:"#d6bca5",
+        nude:"#8B5E3C",
         inputDark: "#383735",
         backgroundDark:"#141414",
         white:"#ffffff",
         input:  "#d3dbd0",
+        footerDark: "#030303",
     };
 
     const spacing ={
@@ -39,6 +40,9 @@
             bold: 700,
             heavy: 800,
         },
+        family: {
+            fontFamily: "'Atkinson Hyperlegible', sans-serif",
+        }
     };
     const borderRadius = {
         subtle: 1,
