@@ -52,7 +52,7 @@ const RightSection = styled.div`
 `;
 
 const FooterLink = styled.a`
-  color: ${theme.colors.footerDark};
+  color: ${theme.colors.white};
   text-decoration: none;
 
   &:hover {
