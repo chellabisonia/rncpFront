@@ -347,7 +347,7 @@ const BurgerBar = styled.span`
   position: absolute;
   width: 22px;
   height: 2px;
-  background: ${theme.colors.dark || "#1a1a1a"};
+  background: ${theme.colors.white || "#1a1a1a"};
   transition: transform 0.25s ease, opacity 0.2s ease;
   transform-origin: center;
 
