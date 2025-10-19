@@ -1,12 +1,36 @@
-# React + Vite
+# 🏡 StayWithLocals
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
+## 🚀 Introduction
 
-Currently, two official plugins are available:
+Le frontend de ce projet est développé avec React, offrant une interface moderne, fluide et responsive pour la plateforme de réservation de séjours chez l’habitant.
+Les utilisateurs peuvent parcourir les différentes offres, consulter les détails d’un séjour et effectuer leurs réservations en toute simplicité.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+L’interface est conçue avec Styled-components, permettant un style modulable et maintenable, tout en garantissant une expérience utilisateur élégante et cohérente sur l’ensemble de l’application.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️Stack technique
+-React JS — Framework principal pour la construction de l’interface utilisateur
+
+-Styled-components — Gestion du style et des thèmes dynamiques
+
+-ESLint — Linting et formatage du code
+
+---
+
+## 📥 Lancement du projet
+
+1. Installer les dépendances
+```bash
+npm install
+```
+2. Démarrer l'application
+```bash
+  npm run dev
+```
+
+
+
+### 📜 Licence
+📝 Ce projet est sous licence MIT.
