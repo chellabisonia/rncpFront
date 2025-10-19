@@ -1,4 +1,4 @@
-# 🏡 StayWithLocals
+# 🏡 StayWithLocals-Frontend
 
 ---
 ## 🚀 Introduction
