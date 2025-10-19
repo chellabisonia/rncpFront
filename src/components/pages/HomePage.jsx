@@ -89,7 +89,7 @@ const StyledPopularStays = styled.div`
     margin-top: -4px;
 
     h1 {
-        color: #ffffff;
+        color: ${theme.colors.white};
         font-size: 1.2rem;
         font-family: ${theme.fonts.family};
         font-weight: 600;
