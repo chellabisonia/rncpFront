@@ -3,11 +3,12 @@ import styled from "styled-components";
 import PrimaryButton from "../reusable-ui/PrimaryButton.jsx";
 import Logo from "../reusable-ui/Logo.jsx";
 import { theme } from "../../theme/index.jsx";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+
     const handleToLoginPage = () => {
         navigate("/login");
     };
@@ -15,7 +16,6 @@ export default function Header() {
         navigate("/register");
     };
 
-    // Empêche le scroll de la page quand le menu mobile est ouvert
     useEffect(() => {
         if (open) document.body.style.overflow = "hidden";
         else document.body.style.overflow = "";
@@ -27,15 +27,20 @@ export default function Header() {
             <HeaderBar>
                 <Logo />
                 <ButtonGroup>
-                    <PrimaryButton variant="contained" onClick={handleToLoginPage}>Connexion</PrimaryButton>
-                    <PrimaryButton variant="contained" onClick={handleToRegistrationPage}>Inscription</PrimaryButton>
+                    <PrimaryButton variant="contained" onClick={handleToLoginPage}>
+                        Connexion
+                    </PrimaryButton>
+                    <PrimaryButton variant="contained" onClick={handleToRegistrationPage}>
+                        Inscription
+                    </PrimaryButton>
                 </ButtonGroup>
 
                 <BurgerButton
+                    type="button"
                     aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
                     aria-expanded={open}
                     aria-controls="mobile-menu"
-                    onClick={() => setOpen((v) => !v)}
+                    onClick={() => setOpen(v => !v)}
                 >
                     <BurgerBar $open={open} />
                     <BurgerBar $open={open} />
@@ -43,13 +48,19 @@ export default function Header() {
                 </BurgerButton>
             </HeaderBar>
 
-            {/* Overlay + panneau superposé */}
             <Backdrop $open={open} onClick={() => setOpen(false)} />
+
             <MobileMenu id="mobile-menu" $open={open}>
-                <PrimaryButton variant="contained" onClick={() => setOpen(false)}>
+                <PrimaryButton
+                    variant="contained"
+                    onClick={() => { setOpen(false); navigate("/login"); }}
+                >
                     Connexion
                 </PrimaryButton>
-                <PrimaryButton variant="contained" onClick={() => setOpen(false)}>
+                <PrimaryButton
+                    variant="contained"
+                    onClick={() => { setOpen(false); navigate("/register"); }}
+                >
                     Inscription
                 </PrimaryButton>
             </MobileMenu>
@@ -63,15 +74,15 @@ const HeaderContainer = styled.header`
   position: fixed;
   inset: 0 0 auto 0;
   height: ${HEADER_HEIGHT}px;
-  z-index: 1000; /* base du header */
+  z-index: 1000;
 `;
 
 const HeaderBar = styled.div`
   height: 100%;
-  background: ${theme.colors.nude};
-  border-bottom: 1px solid ${theme.colors.nude};
-    border-top-left-radius: ${theme.fonts.sizes.XXXS};
-    border-top-right-radius: ${theme.fonts.sizes.XXXS};
+  background: ${theme.colors.white};
+  border-bottom: 1px solid ${theme.colors.pageBody};
+  border-top-left-radius: ${theme.fonts.sizes.XXXS};
+  border-top-right-radius: ${theme.fonts.sizes.XXXS};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,46 +95,24 @@ const ButtonGroup = styled.div`
   height: 32px;
 
   @media (max-width: 768px) {
-    display: none; /* caché en mobile */
+    display: none;
   }
 `;
-/*
-const BurgerButton = styled.button`
-  width: 40px;
-  height: 40px;
-  border: 0 ;
-  background: transparent;
-  display: none;
-  cursor: pointer;
-    outline: none;
-    box-shadow: none;
-
-  @media (max-width: 768px) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-    &:focus-visible{
-        outline: 2px solid ${theme.colors.black};
-        border-radius: 4px;
-    }
-`;*/
 
 const BurgerButton = styled.button`
-  /* reset de base */
   width: 40px;
   height: 40px;
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
-
-  /* pour Safari / mobile */
   -webkit-appearance: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;
 
-  /* caché en desktop */
+  /* important pour que les barres en position:absolute se placent correctement */
+  position: relative;
+
   display: none;
   @media (max-width: 768px) {
     display: inline-flex;
@@ -131,7 +120,6 @@ const BurgerButton = styled.button`
     justify-content: center;
   }
 
-  /* 🔒 important : neutraliser tous les états */
   &:focus,
   &:focus-visible,
   &:active {
@@ -139,18 +127,14 @@ const BurgerButton = styled.button`
     box-shadow: none !important;
   }
 
-  /* Firefox ajoute un bord interne : on le retire */
-  &::-moz-focus-inner {
-    border: 0;
-  }
+  &::-moz-focus-inner { border: 0; }
 `;
-
 
 const BurgerBar = styled.span`
   position: absolute;
   width: 22px;
   height: 2px;
-  background: ${theme.colors.white || "#1a1a1a"};
+  background: ${theme.colors.inputDark || "#1a1a1a"};
   transition: transform 0.25s ease, opacity 0.2s ease;
   transform-origin: center;
 
@@ -165,10 +149,9 @@ const BurgerBar = styled.span`
   }
 `;
 
-/* Fond semi-transparent qui couvre la page quand le menu est ouvert */
 const Backdrop = styled.div`
   position: fixed;
-  inset: ${HEADER_HEIGHT}px 0 0 0; /* commence sous le header */
+  inset: ${HEADER_HEIGHT}px 0 0 0;
   background: rgba(0, 0, 0, 0.35);
   opacity: ${({ $open }) => ($open ? 1 : 0)};
   pointer-events: ${({ $open }) => ($open ? "auto" : "none")};
@@ -176,14 +159,13 @@ const Backdrop = styled.div`
   z-index: 1001;
 `;
 
-/* Panneau mobile superposé (ne pousse pas le contenu) */
 const MobileMenu = styled.nav`
   position: fixed;
   top: ${HEADER_HEIGHT}px;
   left: 0;
   right: 0;
-  background: ${theme.colors.nude};
-  border-bottom: 1px solid ${theme.colors.nude};
+  background: ${theme.colors.white};
+  border-bottom: 1px solid ${theme.colors.white};
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   display: grid;
   gap: 8px;
@@ -192,11 +174,9 @@ const MobileMenu = styled.nav`
   opacity: ${({ $open }) => ($open ? 1 : 0)};
   pointer-events: ${({ $open }) => ($open ? "auto" : "none")};
   transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 1002; /* au-dessus du backdrop */
+  z-index: 1002;
 
-  @media (min-width: 769px) {
-    display: none;
-  }
+  @media (min-width: 769px) { display: none; }
 
   & > button {
     width: 100%;
