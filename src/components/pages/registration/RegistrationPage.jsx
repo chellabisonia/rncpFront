@@ -22,7 +22,7 @@ const PageContainer = styled.div`
     flex-direction: column;
     min-height: 100vh;
     width: 100vw;
-    background-color: ${theme.colors.backgroundDark};
+    background-color: ${theme.colors.pageBody};
     box-sizing: border-box;
     overflow-x: hidden;
 `
@@ -32,8 +32,6 @@ const MainContent = styled.main`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${theme.colors.backgroundDark};
-    }
-
+    background-color: ${theme.colors.pageBody};
     
 `;

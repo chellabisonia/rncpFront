@@ -6,7 +6,7 @@ import {theme} from "../../theme/index.jsx";
 export default function Logo({ className, onClick }) {
     return (
         <LogoStyled className={className} onClick={onClick}>
-            <FaHome className="home-logo" />
+            <FaHome className="home-logo"  color={theme.colors.inputDark}/>
             <h1>StayWithLocals</h1>
         </LogoStyled>
     );
@@ -26,7 +26,7 @@ const LogoStyled = styled.div`
     h1 {
         display: inline;
         text-align: center;
-        color: ${theme.colors.white};
+        color: ${theme.colors.inputDark};
         font-size: ${theme.fonts.sizes.P2};
         line-height: ${theme.fonts.sizes.P3};
         font-family: ${theme.fonts.family};
@@ -36,7 +36,7 @@ const LogoStyled = styled.div`
 
     .home-logo {
         font-size: ${theme.fonts.sizes.P2};
-        color: ${theme.colors.white};
+        color: ${theme.colors.inputDark};
         transition: color 0.3s ease-in-out;
     }
 `;

@@ -44,7 +44,7 @@ const FormContainer = styled.form`
     flex-direction: column;
     gap: 24px;
     padding: 24px;
-    background-color: ${theme.colors.backgroundDark};
+    background-color: ${theme.colors.pageBody};
     width: 100%;
     max-width: 400px;
 
@@ -53,7 +53,7 @@ const FormContainer = styled.form`
         font-family: ${theme.fonts.family};
         font-size: 24px;
         font-weight: bold;
-        color: ${theme.colors.white};
+        color: ${theme.colors.inputDark};
 
         @media (max-width: 480px) {
             font-size: 20px;
@@ -65,10 +65,11 @@ const FormContainer = styled.form`
 const ForgotPassword = styled.a`
     font-family: ${theme.fonts.family};
     font-size: 14px;
-    color: ${theme.colors.white};
+    color: ${theme.colors.inputDark};
     text-decoration: none;
     text-align: center;
     &:hover {
         text-decoration: underline;
+        color: ${theme.colors.inputDark};
     }
 `;

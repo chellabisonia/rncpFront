@@ -1,10 +1,7 @@
     const colors ={
-        nude:"#8B5E3C",
-        inputDark: "#383735",
-        backgroundDark:"#141414",
-        white:"#ffffff",
-        input:  "#d3dbd0",
-        footerDark: "#030303",
+        white:"#FFFFFF",
+        inputDark: "#2C3E50",
+        pageBody: "#F5F5F5",
     };
 
     const spacing ={

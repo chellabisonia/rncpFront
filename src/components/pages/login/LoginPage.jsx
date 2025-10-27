@@ -18,23 +18,21 @@ export default function LoginPage() {
 }
 
 const PageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    width: 100vw;
-    background-color: ${theme.colors.backgroundDark};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: ${theme.colors.pageBody};
+  box-sizing: border-box;
+  overflow-x: hidden;
+  padding-top: 64px; /* compense le header fixe */
 `;
 
 const MainContent = styled.main`
-    flex: 1;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${theme.colors.backgroundDark};
-
-    @media (max-width: 768px) {
-        padding: 20px 10px;
-    }
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${theme.colors.pageBody};
 `;
 
