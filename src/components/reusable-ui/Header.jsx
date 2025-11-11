@@ -53,7 +53,7 @@ export default function Header() {
         <HeaderContainer>
             <HeaderBar>
                 <Logo/>
-                {/!* Burger menu (tous écrans) *!/}
+                {/* Burger menu (tous écrans) */}
                 <PopupState variant="popover" popupId="header-burger-menu">
                     {(popupState) => (
                         <>
