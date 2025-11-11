@@ -30,12 +30,18 @@ export async function login(payload) {
     }
     //enregistre le token dans le local storage en clè valeur
     localStorage.setItem("auth_token", token);
+    //informer l'app que l'état d'auth a changé
+    window.dispatchEvent(new CustomEvent("auth-changed", {detail: {isAuthenticated: true}}));
+
     return token;
 }
 
 //supprime le token (déconnexion)
 export function logout() {
     localStorage.removeItem("auth_token");
+    //    //informer l'app que l'état d'auth a changé
+    window.dispatchEvent(new CustomEvent("auth-changed", {detail: {isAuthenticated: false}}));
+
 }
 
 //réccupère le token depuis le navigateur
