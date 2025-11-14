@@ -1,0 +1,34 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # clone le code source à l'intérieur de la VM Github
+      - uses: actions/checkout@v4
+
+      # Installe node + configure un cache npm pour accélerer les workflows suivants
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"   # je te conseille LTS plutôt que 23.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint frontend
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test -- --watch=false
+
+      # Build de mon app en mode prod (utile avant de déployer)
+      - name: Build project
+        run: npm run build
