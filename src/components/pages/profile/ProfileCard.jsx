@@ -32,10 +32,13 @@ export default function ProfileCard({
 
     // Auto-close dialog when parent sends cancel signal
     useEffect(() => {
-        if (dlg.open) {
-            setDlg((d) => ({...d, open: false}));
-        }
-    }, [cancelSignal, dlg.open]);
+        setDlg((d) =>
+            d.open
+                ? {...d, open: false}
+                : d
+        );
+    }, [cancelSignal]);
+
 
     const openEditor = (field, label, {type = "text", multiline = false} = {}) => {
         if (!isEditing) return;
@@ -85,7 +88,7 @@ export default function ProfileCard({
                 onEditField={openEditor}
             />
 
-            <Divider />
+            <Divider/>
 
             <ProfileBio
                 bio={profile.bio}
@@ -130,9 +133,8 @@ const Card = styled.section`
             $editing &&
             css`
                 border-color: transparent;
-                box-shadow:
-                        0 4px 10px rgba(0, 0, 0, 0.10),
-                        0 8px 24px rgba(0, 0, 0, 0.15);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10),
+                0 8px 24px rgba(0, 0, 0, 0.15);
                 transform: translateY(-2px);
             `}
 `;
