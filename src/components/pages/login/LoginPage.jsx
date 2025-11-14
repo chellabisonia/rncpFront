@@ -1,16 +1,51 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import Header from '../../reusable-ui/Header.jsx';
 import LoginForm from './LoginForm.jsx';
 import {theme} from "../../../theme/index.jsx";
 import Footer from "../../reusable-ui/Footer.jsx";
+import {useNavigate} from "react-router-dom";
+import {login} from "../../../services/authService.js";
 
 export default function LoginPage() {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+
+    async function handleLogin({username, password}) {
+        //validation simple côté  client
+        if (!username || !password) {
+            setError("Veuillez remplir tous les champs.");
+            return;
+        }
+
+        try {
+            setError("");
+            setLoading(true);
+            await login({username, password});
+            //succès redirection Home Page
+            navigate("/", {replace: true});
+        } catch (e) {
+            if (e.response && e.response.data && e.response.data.message) {
+                setError(e.response.data.message);
+            } else {
+                setError(e.response.statusText);
+            }
+        } finally {
+            setLoading(false);
+        }
+
+    }
+
     return (
         <PageContainer>
-            <Header />
+            <Header/>
             <MainContent>
-                <LoginForm />
+                <LoginForm
+                    onSubmit={handleLogin}
+                    loading={loading}
+                    error={error}
+                />
             </MainContent>
             <Footer/>
         </PageContainer>
@@ -22,19 +57,17 @@ const PageContainer = styled.div`
     flex-direction: column;
     min-height: 100vh;
     width: 100vw;
-    background-color: ${theme.colors.backgroundDark};
+    background-color: ${theme.colors.pageBody};
+    box-sizing: border-box;
+    overflow-x: hidden;
+    padding-top: 64px; /* compense le header fixe */
 `;
 
 const MainContent = styled.main`
     flex: 1;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${theme.colors.backgroundDark};
-
-    @media (max-width: 768px) {
-        padding: 20px 10px;
-    }
+    background-color: ${theme.colors.pageBody};
 `;
 

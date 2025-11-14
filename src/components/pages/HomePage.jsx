@@ -39,7 +39,7 @@ export default function HomePage() {
 
 // ===== STYLES =====
 const HomePageContainer = styled.div`
-    background-color: ${theme.colors.backgroundDark}; /* fond noir */
+    background-color: ${theme.colors.pageBody}; 
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -63,23 +63,28 @@ const SearchBar = styled.div`
 `;
 
 const StyledTextInput = styled(TextInput)`
-    background-color: ${theme.colors.inputDark}
+    background-color: ${theme.colors.inputDark};
     border-radius: 50px;
     flex: 1;
     input {
         border-radius: 50px;
         padding: 0.6rem 1rem;
+        &::placeholder {
+            color: ${theme.colors.inputDark};
+            opacity: 0.7; /* facultatif : un peu de transparence */
+        }
     }
+   
 `;
 
 const StyledPrimaryButton = styled(PrimaryButton)`
-    background-color: ${theme.colors.greyDark};
+    background-color: ${theme.colors.inputDark};
     color: ${theme.colors.white};
     border-radius: 50px;
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
     &:hover {
-        background-color: ${theme.colors.grey};
+        background-color: ${theme.colors.inputDark};
     }
 `;
 
@@ -89,7 +94,7 @@ const StyledPopularStays = styled.div`
     margin-top: -4px;
 
     h1 {
-        color: ${theme.colors.white};
+        color: ${theme.colors.inputDark};
         font-size: 1.2rem;
         font-family: ${theme.fonts.family};
         font-weight: 600;

@@ -21,7 +21,7 @@ const FooterContainer = styled.footer`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: ${theme.colors.nude};
+    background-color: ${theme.colors.white};
     padding: 1rem 2rem;
     font-size: 0.9rem;
     border-bottom-left-radius: ${theme.fonts.sizes.XXXS};
@@ -52,11 +52,11 @@ const RightSection = styled.div`
 `;
 
 const FooterLink = styled.a`
-  color: ${theme.colors.white};
+  color: ${theme.colors.inputDark};
   text-decoration: none;
 
   &:hover {
-    color: ${theme.colors.footerDark};
+    color: ${theme.colors.inputDark};
     text-decoration: underline;
   }
 `;
