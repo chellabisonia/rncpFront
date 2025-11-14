@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import Header from '../../reusable-ui/Header.jsx';
-import LoginForm from './LoginForm.jsx';
+
+import {login} from "../../../services/authService.js";
 import {theme} from "../../../theme/index.jsx";
 import Footer from "../../reusable-ui/Footer.jsx";
-import {useNavigate} from "react-router-dom";
-import {login} from "../../../services/authService.js";
+import Header from '../../reusable-ui/Header.jsx';
+
+import LoginForm from './LoginForm.jsx';
 
 export default function LoginPage() {
     const navigate = useNavigate();

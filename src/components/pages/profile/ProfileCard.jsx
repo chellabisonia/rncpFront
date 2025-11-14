@@ -1,13 +1,14 @@
-import React, {useEffect, useRef, useState} from "react";
-import styled, {css} from "styled-components";
-import {theme} from "../../../theme/index.jsx";
 import {useTheme} from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import React, {useEffect, useRef, useState} from "react";
+import styled, {css} from "styled-components";
 
-import ProfileHeader from "./ProfileHeader.jsx";
-import ProfileInfoFields from "./ProfileInfoFields.jsx";
+import {theme} from "../../../theme/index.jsx";
+
 import ProfileBio from "./ProfileBio.jsx";
 import ProfileEditDialog from "./ProfileEditDialog.jsx";
+import ProfileHeader from "./ProfileHeader.jsx";
+import ProfileInfoFields from "./ProfileInfoFields.jsx";
 
 export default function ProfileCard({
                                         isEditing,

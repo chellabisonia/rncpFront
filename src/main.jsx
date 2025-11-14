@@ -1,9 +1,10 @@
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { CssBaseline } from '@mui/material';
+
+import App from './App.jsx';
 import { theme as customTheme } from './theme/index.jsx';
 import './index.css';
 

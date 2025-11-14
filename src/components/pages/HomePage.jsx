@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import Header from '../reusable-ui/Header.jsx';
+
+import { theme } from "../../theme";
 import Footer from "../reusable-ui/Footer.jsx";
+import Header from '../reusable-ui/Header.jsx';
 import PrimaryButton from "../reusable-ui/PrimaryButton.jsx";
 import TextInput from "../reusable-ui/TextInput.jsx";
-import { theme } from "../../theme";
 
 export default function HomePage() {
     const [textInput, setTextInput] = React.useState("");

@@ -1,10 +1,13 @@
 import React, {useRef, useState} from "react";
 import styled from "styled-components";
-import Header from "../../reusable-ui/Header.jsx";
-import Footer from "../../reusable-ui/Footer.jsx";
-import PrimaryButton from "../../reusable-ui/PrimaryButton.jsx";
-import ProfileCard from "./ProfileCard.jsx";
+
 import {theme} from "../../../theme/index.jsx";
+import Footer from "../../reusable-ui/Footer.jsx";
+import Header from "../../reusable-ui/Header.jsx";
+import PrimaryButton from "../../reusable-ui/PrimaryButton.jsx";
+
+import ProfileCard from "./ProfileCard.jsx";
+
 
 const BP = {
     mobile: 640,     // <= 640px

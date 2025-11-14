@@ -1,9 +1,10 @@
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import React from "react";
 import styled from "styled-components";
+
 import {theme} from "../../../theme/index.jsx";
 import PrimaryButton from "../../reusable-ui/PrimaryButton.jsx";
 
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 const BP = {
     mobile: 640,

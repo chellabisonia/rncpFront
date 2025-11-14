@@ -1,22 +1,20 @@
-// src/components/layout/Header.jsx
-import React, {useState, useEffect} from "react";
-import styled from "styled-components";
-import Logo from "../reusable-ui/Logo.jsx";
-import {theme} from "../../theme/index.jsx";
-import {useNavigate} from "react-router-dom";
-import {isAuthenticated as checkAuth, logout} from "../../services/authService.js";
-
-// MUI (menu burger)
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import PopupState, {bindTrigger, bindMenu} from "material-ui-popup-state";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import styled from "styled-components";
+
+import {isAuthenticated as checkAuth, logout} from "../../services/authService.js";
+import {theme} from "../../theme/index.jsx";
+import Logo from "../reusable-ui/Logo.jsx";
 
 export default function Header() {
     const [isAuth, setIsAuth] = useState(checkAuth());

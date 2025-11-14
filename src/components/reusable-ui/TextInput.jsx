@@ -1,6 +1,7 @@
+import TextField from '@mui/material/TextField';
 import React from 'react';
 import styled from "styled-components";
-import TextField from '@mui/material/TextField';
+
 import { theme } from "../../theme/index.jsx";
 
 export default function TextInput({ variant = "outlined", value, label, onChange, type, placeholder,name }) {

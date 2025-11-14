@@ -1,6 +1,7 @@
+import Button from '@mui/material/Button';
 import React from 'react';
 import styled from "styled-components";
-import Button from '@mui/material/Button';
+
 import { theme } from "../../theme/index.jsx";
 
 export default function PrimaryButton({ variant, onClick, children, type }) {

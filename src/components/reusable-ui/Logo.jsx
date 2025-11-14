@@ -1,6 +1,6 @@
+import { FaHome } from "react-icons/fa";
 import styled from "styled-components";
 
-import { FaHome } from "react-icons/fa";
 import {theme} from "../../theme/index.jsx";
 
 export default function Logo({ className, onClick }) {

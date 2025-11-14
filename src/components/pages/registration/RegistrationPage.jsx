@@ -1,11 +1,14 @@
 import React, {useState} from "react";
-import styled from "styled-components";
-import Header from "../../reusable-ui/Header.jsx";
-import Footer from "../../reusable-ui/Footer.jsx";
-import {theme} from "../../../theme/index.jsx";
-import RegistrationForm from "./RegistrationForm.jsx";
 import {useNavigate} from "react-router-dom";
+import styled from "styled-components";
+
 import {register} from "../../../services/authService.js";
+import {theme} from "../../../theme/index.jsx";
+import Footer from "../../reusable-ui/Footer.jsx";
+import Header from "../../reusable-ui/Header.jsx";
+
+import RegistrationForm from "./RegistrationForm.jsx";
+
 
 export default function RegistrationPage() {
     const navigate = useNavigate();
