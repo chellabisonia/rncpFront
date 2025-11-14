@@ -8,6 +8,10 @@ import globals from 'globals'
 
 export default defineConfig([
   globalIgnores(['dist', 'node_modules']),
+
+  //
+  // --- CONFIG PRINCIPALE ---
+  //
   {
     files: ['**/*.{js,jsx}'],
     extends: [
@@ -47,7 +51,7 @@ export default defineConfig([
       //
       'no-unused-vars': [
         'warn',
-          //Variables inutilisées = warning
+        //Variables inutilisées = warning
         {
           varsIgnorePattern: '^[A-Z_]',  //Ignore les variables MAJUSCULES (souvent des constantes)
           argsIgnorePattern: '^_',      // autorise les args inutilisés qui commencent par _
@@ -73,13 +77,17 @@ export default defineConfig([
       //
       // --- Vite / HMR ---
       //
-      'react-refresh/only-export-components': [ //“N’exporte que des composants React depuis un fichier contenant des JSX.”
+      'react-refresh/only-export-components': [
+        //“N’exporte que des composants React depuis un fichier contenant des JSX.”
         'warn',
         { allowConstantExport: true },
       ],
 
+      //
       // --- Import Order ---
-      'import/order': [ //Impose un ordre logique des imports : 1-builtin (ex: fs, path, natif Node), 2-external (ex: react, axios, mui), 3-internal (chemins absolus type src/...), 4-parent, 5-sibling, 6-index
+      //
+      'import/order': [
+        //Impose un ordre logique des imports
         'error',
         {
           groups: [
@@ -96,4 +104,18 @@ export default defineConfig([
       ],
     },
   },
+
+  //
+  // --- CONFIG POUR LES TESTS (JEST) ---
+  //
+  {
+    files: ['**/*.test.js', '**/*.test.jsx'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.jest,
+      },
+    },
+  }
+
 ])
