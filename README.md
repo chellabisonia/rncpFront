@@ -1,6 +1,6 @@
 # 🏡 StayWithLocals-Frontend
-![CI/CD](https://github.com/chellabisonia/rncpFront/actions/workflows/frontend-ci.yaml/badge.svg)  
 
+![CI/CD](https://github.com/chellabisonia/rncpFront/actions/workflows/frontend-ci.yaml/badge.svg)  
 ---
 ## 🚀 Introduction
 
