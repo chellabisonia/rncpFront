@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@emotion/styled": "^11.14.1",
+    "@jest/globals": "^29.7.0",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@mui/styled-engine-sc": "^7.3.0",
