@@ -12,26 +12,28 @@ jobs:
 
     # Toutes les commandes `run:` se feront dans jdcv
     defaults:
-        run:
+      run:
         working-directory: ./jdcv
 
     steps:
-      #clone le code source à l'intérieur de la VM Github
+      # clone le code source à l'intérieur de la VM Github
       - uses: actions/checkout@v4
-      #Installe node + configure un cache npm pour accélerer les workflows suivants
+
+      # Installe node + configure un cache npm pour accélerer les workflows suivants
       - uses: actions/setup-node@v4
         with:
-          node-version: "23.x"
-          cache: 'npm'
+          node-version: "22.x"   # je te conseille LTS plutôt que 23.x
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint frontend
         run: npm run lint
 
       - name: Run tests
         run: npm test -- --watch=false
-      #Build de mon app en mode prod (utile avant de déployer)
+
+      # Build de mon app en mode prod (utile avant de déployer)
       - name: Build project
         run: npm run build
