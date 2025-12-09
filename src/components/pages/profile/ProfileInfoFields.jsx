@@ -35,7 +35,7 @@ export default function ProfileInfoFields({profile, isEditing, onEditField}) {
 
             <EditableFieldLine
                 label="Téléphone:"
-                value={profile.phone}
+                value={profile.phoneNumber}
                 field="phone"
                 tooltip="Modifier le téléphone"
                 isEditing={isEditing}
@@ -136,3 +136,4 @@ const RightIcon = styled.span`
         margin-left: auto;
     }
 `;
+
