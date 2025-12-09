@@ -29,6 +29,8 @@ export default function Header() {
         navigate("/");
     };
 
+    const handleToHomePage = () => navigate("/");
+
     // écoute les changements d'auth (login/logout dans cet onglet)
     useEffect(() => {
         const onAuthChanged = (e) => {
@@ -50,7 +52,9 @@ export default function Header() {
     return (
         <HeaderContainer>
             <HeaderBar>
-                <Logo/>
+                <LogoWrapper onClick={handleToHomePage}>
+                    <Logo/>
+                </LogoWrapper>
                 {/* Burger menu (tous écrans) */}
                 <PopupState variant="popover" popupId="header-burger-menu">
                     {(popupState) => (
@@ -175,3 +179,8 @@ const HeaderBar = styled.div`
     padding: 0 16px;
 `;
 
+const LogoWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+`;
