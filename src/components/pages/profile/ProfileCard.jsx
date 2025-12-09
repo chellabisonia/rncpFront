@@ -1,9 +1,9 @@
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import React, {useEffect, useRef, useState} from "react";
-import styled, {css} from "styled-components";
+import React, { useEffect, useRef, useState } from "react";
+import styled, { css } from "styled-components";
 
-import {theme} from "../../../theme/index.jsx";
+import { theme } from "../../../theme/index.jsx";
 
 import ProfileBio from "./ProfileBio.jsx";
 import ProfileEditDialog from "./ProfileEditDialog.jsx";
@@ -33,15 +33,10 @@ export default function ProfileCard({
 
     // Auto-close dialog when parent sends cancel signal
     useEffect(() => {
-        setDlg((d) =>
-            d.open
-                ? {...d, open: false}
-                : d
-        );
+        setDlg((d) => (d.open ? { ...d, open: false } : d));
     }, [cancelSignal]);
 
-
-    const openEditor = (field, label, {type = "text", multiline = false} = {}) => {
+    const openEditor = (field, label, { type = "text", multiline = false } = {}) => {
         if (!isEditing) return;
         setDlg({
             open: true,
@@ -89,14 +84,18 @@ export default function ProfileCard({
                 onEditField={openEditor}
             />
 
-            <Divider/>
+            <Divider />
 
             <ProfileBio
-                bio={profile.bio}
+                // === MODIF : on alimente la bio avec personalDescription
+                bio={profile.personalDescription}
                 title="Description personnelle"
                 isEditing={isEditing}
                 onEditBio={() =>
-                    openEditor("bio", "Description personnelle", {multiline: true})
+                    // === MODIF : on édite bien le champ "personalDescription"
+                    openEditor("personalDescription", "Description personnelle", {
+                        multiline: true,
+                    })
                 }
             />
 
@@ -130,12 +129,13 @@ const Card = styled.section`
     width: 100%;
     box-sizing: border-box;
 
-    ${({$editing}) =>
+    ${({ $editing }) =>
             $editing &&
             css`
                 border-color: transparent;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10),
-                0 8px 24px rgba(0, 0, 0, 0.15);
+                box-shadow:
+                        0 4px 10px rgba(0, 0, 0, 0.1),
+                        0 8px 24px rgba(0, 0, 0, 0.15);
                 transform: translateY(-2px);
             `}
 `;
@@ -143,6 +143,7 @@ const Card = styled.section`
 const Divider = styled.hr`
     grid-column: 1 / -1;
     border: none;
-    border-top: 1px solid rgba(0, 0, 0, .08);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     margin: clamp(1rem, 3vw, 1.5rem) 0;
 `;
+
