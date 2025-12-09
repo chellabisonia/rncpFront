@@ -43,7 +43,7 @@ export default function ProfileHeader({
                             <IconSlot>
                                 <PhotoCameraIcon fontSize="small"/>
                             </IconSlot>
-                            Modifier la photo
+                            Modifier
                         </PrimaryButton>
                     </>
                 )}
@@ -108,3 +108,4 @@ const IconSlot = styled.span`
         display: block;
     }
 `;
+

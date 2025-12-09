@@ -1,44 +1,129 @@
-import React, {useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import {theme} from "../../../theme/index.jsx";
+import { getToken } from "../../../services/authService";
+import { theme } from "../../../theme/index.jsx";
 import Footer from "../../reusable-ui/Footer.jsx";
 import Header from "../../reusable-ui/Header.jsx";
 import PrimaryButton from "../../reusable-ui/PrimaryButton.jsx";
 
 import ProfileCard from "./ProfileCard.jsx";
 
-
 const BP = {
-    mobile: 640,     // <= 640px
-    tablet: 1024,    // 641-1024px
+    mobile: 640,
+    tablet: 1024,
 };
 
-export default function ProfilePage({loading}) {
-    const [profile, setProfile] = useState({
-        lastname: "Picard",
-        firstname: "Jean-Luc",
-        username: "CaptainJL",
-        address: "1701-D Enterprise, Starfleet",
-        phone: "555-1701",
-        email: "picard@starfleet.com",
-        bio:
-            "Passionné par l'accueil et le partage de moments inoubliables, je suis ravi de vous accueillir dans mon logement chaleureux.",
-        avatarUrl:
-            "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=256&q=80&auto=format&fit=crop",
-    });
+const DEFAULT_PROFILE = {
+    lastname: "",
+    firstname: "",
+    username: "",
+    address: "",
+    phoneNumber: "",
+    email: "",
+    personalDescription: "",
+    avatarUrl: "",
+};
 
+const getAuthHeaders = () => {
+    const token = getToken();
+    if (!token) {
+        console.warn("[ProfilePage] Aucun token trouvé.");
+        return {};
+    }
+
+    return {
+        Authorization: `Bearer ${token}`,
+    };
+};
+
+// petite fonction utilitaire pour savoir si le profil a changé
+const isProfileEqual = (a, b) => {
+    if (!a || !b) return false;
+    const keys = Object.keys(a);
+    for (const key of keys) {
+        if (a[key] !== b[key]) {
+            return false;
+        }
+    }
+    return true;
+};
+
+export default function ProfilePage() {
+    const [profile, setProfile] = useState(DEFAULT_PROFILE);
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const snapshotRef = useRef(profile);
     const [cancelSignal, setCancelSignal] = useState(0);
+    const [userId, setUserId] = useState(null);
 
+    // ===== FETCH USER =====
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const fetchUser = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const res = await fetch("http://localhost:8080/api/users/me", {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        ...getAuthHeaders(),
+                    },
+                    signal: controller.signal,
+                });
+
+                if (res.status === 401) {
+                    setError("Vous n'êtes pas autorisé. Merci de vous reconnecter.");
+                    throw new Error("Unauthorized");
+                }
+
+                if (!res.ok) throw new Error(`Erreur ${res.status}`);
+
+                const data = await res.json();
+
+                const nextProfile = {
+                    lastname: data.lastname ?? "",
+                    firstname: data.firstname ?? "",
+                    username: data.username ?? "",
+                    address: data.address ?? "",
+                    phoneNumber: data.phoneNumber ?? "",
+                    email: data.email ?? "",
+                    personalDescription: data.personalDescription ?? "",
+                    avatarUrl: data.avatarUrl ?? "",
+                };
+
+                setProfile(nextProfile);
+                snapshotRef.current = nextProfile;
+
+                if (data.id !== null) setUserId(data.id);
+            } catch (e) {
+                if (e.name !== "AbortError") {
+                    console.error(e);
+                    setError((prev) => prev ?? "Impossible de charger le profil.");
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUser();
+        return () => controller.abort();
+    }, []);
+
+    // ===== HANDLERS =====
     const enterEdit = () => {
+        // on prend un snapshot AVANT de passer en édition
         snapshotRef.current = profile;
         setIsEditing(true);
     };
 
-    const handleChange = (field, value) =>
-        setProfile((p) => ({...p, [field]: value}));
+    const handleChange = (field, value) => {
+        setProfile((prev) => ({ ...prev, [field]: value }));
+    };
 
     const handleCancel = () => {
         setProfile(snapshotRef.current);
@@ -47,29 +132,88 @@ export default function ProfilePage({loading}) {
     };
 
     const handleSave = async () => {
-        // Next step to do
-        snapshotRef.current = profile;
-        setIsEditing(false);
-        setCancelSignal((n) => n + 1);
+        if (!userId) {
+            setError("Impossible de sauvegarder : ID utilisateur manquant.");
+            return;
+        }
+
+        // 👉 Si rien n'a changé, on ne fait PAS d'appel backend
+        if (isProfileEqual(snapshotRef.current, profile)) {
+            setIsEditing(false);
+            setCancelSignal((n) => n + 1); // pour resync le ProfileCard si besoin
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setError(null);
+
+            const payload = { ...profile, id: userId };
+
+            const res = await fetch(`http://localhost:8080/api/users/${userId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    ...getAuthHeaders(),
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                let backendMessage = "";
+                try {
+                    const errBody = await res.json();
+                    backendMessage = errBody.message || JSON.stringify(errBody);
+                } catch {
+                    backendMessage = await res.text();
+                }
+                throw new Error(backendMessage || `Erreur ${res.status}`);
+            }
+
+            const updated = await res.json();
+
+            const nextProfile = {
+                lastname: updated.lastname ?? "",
+                firstname: updated.firstname ?? "",
+                username: updated.username ?? "",
+                address: updated.address ?? "",
+                phoneNumber: updated.phoneNumber ?? "",
+                email: updated.email ?? "",
+                personalDescription: updated.personalDescription ?? "",
+                avatarUrl: updated.avatarUrl ?? "",
+            };
+
+            setProfile(nextProfile);
+            snapshotRef.current = nextProfile;
+
+            if (updated.id !== null) setUserId(updated.id);
+
+            setIsEditing(false);
+            setCancelSignal((n) => n + 1);
+        } catch (e) {
+            console.error(e);
+            setError(`Erreur lors de la sauvegarde du profil : ${e.message}`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleAvatarFile = (file) => {
         if (!file) return;
         const preview = URL.createObjectURL(file);
-        setProfile((p) => ({...p, avatarUrl: preview}));
-        // TODO: upload serveur puis remplacer par l’URL finale
+        setProfile((prev) => ({ ...prev, avatarUrl: preview }));
     };
 
     return (
         <Page>
-            <Header/>
+            <Header />
             <MainContent>
                 <Section>
                     <CardWrapper>
                         <TopBar>
                             <Title>À propos de moi</Title>
 
-                            {/* Affichage du bouton à droite du titre */}
                             {!isEditing ? (
                                 <PrimaryButton
                                     variant="contained"
@@ -77,7 +221,7 @@ export default function ProfilePage({loading}) {
                                     onClick={enterEdit}
                                     disabled={loading}
                                 >
-                                    Modifier
+                                    {loading ? "Chargement..." : "Modifier"}
                                 </PrimaryButton>
                             ) : (
                                 <Actions>
@@ -95,11 +239,15 @@ export default function ProfilePage({loading}) {
                                         onClick={handleSave}
                                         disabled={loading}
                                     >
-                                        {loading ? "Sauvegarde..." : "Terminé"}
+                                        {loading ? "Sauvegarde..." : "Valider"}
                                     </PrimaryButton>
                                 </Actions>
                             )}
                         </TopBar>
+
+                        {error && (
+                            <p style={{ color: "red", paddingInline: "1rem" }}>{error}</p>
+                        )}
 
                         <ProfileCard
                             isEditing={isEditing}
@@ -111,12 +259,13 @@ export default function ProfilePage({loading}) {
                     </CardWrapper>
                 </Section>
             </MainContent>
-            <Footer/>
+            <Footer />
         </Page>
     );
 }
 
-/* ====== styles ====== */
+/* ====== STYLES ====== */
+
 const Page = styled.div`
     background-color: ${theme.colors.pageBody};
     min-height: 100vh;
@@ -130,8 +279,12 @@ const MainContent = styled.main`
     justify-content: center;
     align-items: flex-start;
     padding-inline: clamp(1rem, 4vw, 2rem);
-    padding-top: clamp(2rem, 5vw, 5rem);
+    padding-top: clamp(4.5rem, 7vw, 6rem);
     padding-bottom: clamp(2rem, 6vw, 4rem);
+
+    @media (max-width: ${BP.mobile}px) {
+        padding-top: 5.5rem;
+    }
 
     @media (min-width: ${BP.tablet + 1}px) {
         align-items: center;
@@ -150,57 +303,80 @@ const CardWrapper = styled.div`
     display: flex;
     flex-direction: column;
 
-    @media (min-width: 641px) and (max-width: ${BP.tablet}px) {
-        max-width: 880px;
-    }
+    @media (min-width: 641px) && (max-width: ${BP.tablet}px) {
+    max-width: 880px;
+}
 `;
 
 const TopBar = styled.div`
-    display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  /* Pas de padding horizontal ici pour coller le titre le plus à gauche possible */
+  padding-inline: 0;
+  flex-wrap: nowrap;
+    text-align: left;
+
+  /* TABLETTE & DESKTOP : ligne, titre à gauche, bouton à droite */
+  @media (min-width: ${BP.mobile + 1}px) {
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-inline: clamp(1rem, 3vw, 2.5rem);
 
-    /* MOBILE: empilement + boutons full width */
-    @media (max-width: ${BP.mobile}px) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: .75rem;
-
-        & > *:last-child {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: .5rem;
-        }
-
-        /* Si un seul bouton (mode affichage), largeur 100% */
-        & > button, & > a, & > div > button {
-            width: 100%;
-        }
+    & > button,
+    & > a {
+      width: auto;
+      flex-shrink: 0;
     }
+  }
+
+  /* MOBILE : colonne + un peu de padding pour respirer */
+  @media (max-width: ${BP.mobile}px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding-inline: 0.75rem;
+
+    & > button,
+    & > a {
+      width: 100%;
+    }
+  }
 `;
 
 const Title = styled.h1`
-    color: ${theme.colors.inputDark};
-    font-size: clamp(1.35rem, 3vw, 2rem);
-    line-height: 1.2;
-    font-family: ${theme.fonts.family};
-    font-weight: 700;
-    margin: 0;
+  color: ${theme.colors.inputDark};
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 0;
+
+  /* prend tout l’espace dispo côté gauche */
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
 `;
 
 const Actions = styled.div`
-    display: flex;
-    gap: .75rem;
+  display: flex;
+  gap: 0.75rem;
 
-    @media (max-width: ${BP.mobile}px) {
-        width: 100%;
-        gap: .5rem;
+  /* Tablette et 1024px : deux boutons côte à côte */
+  @media (max-width: ${BP.tablet}px) {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
 
-        & > button {
-            width: 100%;
-        }
+  /* Mobile : les boutons à l'intérieur passent en full width */
+  @media (max-width: ${BP.mobile}px) {
+    & > button {
+      width: 100%;
     }
+  }
 `;
+
+
