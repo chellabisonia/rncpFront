@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
 
+import maisonImg from "../../assets/picture/maison.jpg";
+import appartImg from "../../assets/picture/montmartre.jpg"
 import { theme } from "../../theme";
 import Footer from "../reusable-ui/Footer.jsx";
 import Header from '../reusable-ui/Header.jsx';
 import PrimaryButton from "../reusable-ui/PrimaryButton.jsx";
+import StayCard  from "../reusable-ui/StayCard.jsx";
 import TextInput from "../reusable-ui/TextInput.jsx";
 
 export default function HomePage() {
@@ -31,6 +34,33 @@ export default function HomePage() {
                 {/* Ici tu mettras tes sections "Séjours populaires" */}
                 <StyledPopularStays>
                     <h1>Séjours populaires</h1>
+                    <CardsGrid>
+                        <StayCard   image={maisonImg}
+                                    title="Chalet de montagne"
+                                    city="Grenoble"
+                                    price={150}/>
+                        <StayCard
+                            image={appartImg}
+                            title="Appartement vue sur Montmartre"
+                            CITY="Paris"
+                            price={150}/><StayCard   image={maisonImg}
+                                                     title="Chalet de montagne"
+                                                     city="Grenoble"
+                                                     price={150}/>
+                        <StayCard
+                            image={appartImg}
+                            title="Appartement vue sur Montmartre"
+                            CITY="Paris"
+                            price={150}/><StayCard   image={maisonImg}
+                                                     title="Chalet de montagne"
+                                                     city="Grenoble"
+                                                     price={150}/>
+                        <StayCard
+                            image={appartImg}
+                            title="Appartement vue sur Montmartre"
+                            CITY="Paris"
+                            price={150}/>
+                    </CardsGrid>
                 </StyledPopularStays>
             </MainContent>
             <Footer />
@@ -40,7 +70,7 @@ export default function HomePage() {
 
 // ===== STYLES =====
 const HomePageContainer = styled.div`
-    background-color: ${theme.colors.pageBody}; 
+    background-color: ${theme.colors.pageBody};
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -75,7 +105,7 @@ const StyledTextInput = styled(TextInput)`
             opacity: 0.7; /* facultatif : un peu de transparence */
         }
     }
-   
+
 `;
 
 const StyledPrimaryButton = styled(PrimaryButton)`
@@ -89,17 +119,25 @@ const StyledPrimaryButton = styled(PrimaryButton)`
     }
 `;
 
-const StyledPopularStays = styled.div`
+const StyledPopularStays = styled.section`
     width: 100%;
-    padding-left: 2rem; /* marge depuis le bord de l’écran */
-    margin-top: -4px;
+    max-width: 1100px;
+    margin-top: 3rem;
 
     h1 {
         color: ${theme.colors.inputDark};
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         font-family: ${theme.fonts.family};
         font-weight: 600;
         line-height: 28px;
         text-align: left;
+        margin-bottom: 1.5rem;
     }
 `;
+
+const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
+  gap: 40px 60px;                        /* espace lignes / colonnes */
+`;
+
