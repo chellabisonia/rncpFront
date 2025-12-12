@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { getToken } from "../../../services/authService";
 import { theme } from "../../../theme/index.jsx";
+import { isProfileEqual } from "../../../utils/profileUtils";
 import Footer from "../../reusable-ui/Footer.jsx";
 import Header from "../../reusable-ui/Header.jsx";
 import PrimaryButton from "../../reusable-ui/PrimaryButton.jsx";
@@ -35,18 +36,6 @@ const getAuthHeaders = () => {
     return {
         Authorization: `Bearer ${token}`,
     };
-};
-
-// petite fonction utilitaire pour savoir si le profil a changé
-const isProfileEqual = (a, b) => {
-    if (!a || !b) return false;
-    const keys = Object.keys(a);
-    for (const key of keys) {
-        if (a[key] !== b[key]) {
-            return false;
-        }
-    }
-    return true;
 };
 
 export default function ProfilePage() {

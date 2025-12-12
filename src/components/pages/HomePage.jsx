@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
 
-import maisonImg from "../../assets/picture/maison.jpg";
-import appartImg from "../../assets/picture/montmartre.jpg"
+import maisonImg from "../../assets/stayPicture/maison.jpg";
+import appartImg from "../../assets/stayPicture/montmartre.jpg"
 import { theme } from "../../theme";
 import Footer from "../reusable-ui/Footer.jsx";
 import Header from '../reusable-ui/Header.jsx';
