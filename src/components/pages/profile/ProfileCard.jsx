@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
 import { theme } from "../../../theme/index.jsx";
@@ -17,8 +17,6 @@ export default function ProfileCard({
                                         onAvatarSelected,
                                         cancelSignal,
                                     }) {
-    const fileRef = useRef(null);
-
     const muiTheme = useTheme();
     const fullScreen = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
@@ -31,7 +29,6 @@ export default function ProfileCard({
         multiline: false,
     });
 
-    // Auto-close dialog when parent sends cancel signal
     useEffect(() => {
         setDlg((d) => (d.open ? { ...d, open: false } : d));
     }, [cancelSignal]);
@@ -48,24 +45,11 @@ export default function ProfileCard({
         });
     };
 
-    const closeEditor = () =>
-        setDlg((d) => ({
-            ...d,
-            open: false,
-        }));
+    const closeEditor = () => setDlg((d) => ({ ...d, open: false }));
 
     const confirmEditor = () => {
         onChange(dlg.field, dlg.value);
         closeEditor();
-    };
-
-    const handleAvatarClick = () => fileRef.current?.click();
-
-    const handleFileChange = (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        onAvatarSelected(file);
-        e.target.value = "";
     };
 
     return (
@@ -73,9 +57,7 @@ export default function ProfileCard({
             <ProfileHeader
                 profile={profile}
                 isEditing={isEditing}
-                fileRef={fileRef}
-                onAvatarClick={handleAvatarClick}
-                onFileChange={handleFileChange}
+                onAvatarSelected={onAvatarSelected}
             />
 
             <ProfileInfoFields
@@ -87,12 +69,10 @@ export default function ProfileCard({
             <Divider />
 
             <ProfileBio
-                // === MODIF : on alimente la bio avec personalDescription
                 bio={profile.personalDescription}
                 title="Description personnelle"
                 isEditing={isEditing}
                 onEditBio={() =>
-                    // === MODIF : on édite bien le champ "personalDescription"
                     openEditor("personalDescription", "Description personnelle", {
                         multiline: true,
                     })
@@ -104,12 +84,7 @@ export default function ProfileCard({
                 fullScreen={fullScreen}
                 onClose={closeEditor}
                 onConfirm={confirmEditor}
-                onChangeValue={(value) =>
-                    setDlg((d) => ({
-                        ...d,
-                        value,
-                    }))
-                }
+                onChangeValue={(value) => setDlg((d) => ({ ...d, value }))}
             />
         </Card>
     );
