@@ -10,10 +10,7 @@ import PrimaryButton from "../../reusable-ui/PrimaryButton.jsx";
 
 import ProfileCard from "./ProfileCard.jsx";
 
-const BP = {
-    mobile: 640,
-    tablet: 1024,
-};
+const BP = { mobile: 640, tablet: 1024 };
 
 const DEFAULT_PROFILE = {
     lastname: "",
@@ -23,19 +20,13 @@ const DEFAULT_PROFILE = {
     phoneNumber: "",
     email: "",
     personalDescription: "",
-    avatarUrl: "",
+    pictureName: "",
 };
 
 const getAuthHeaders = () => {
     const token = getToken();
-    if (!token) {
-        console.warn("[ProfilePage] Aucun token trouvé.");
-        return {};
-    }
-
-    return {
-        Authorization: `Bearer ${token}`,
-    };
+    if (!token) return {};
+    return { Authorization: `Bearer ${token}` };
 };
 
 export default function ProfilePage() {
@@ -43,11 +34,11 @@ export default function ProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
     const snapshotRef = useRef(profile);
     const [cancelSignal, setCancelSignal] = useState(0);
     const [userId, setUserId] = useState(null);
 
-    // ===== FETCH USER =====
     useEffect(() => {
         const controller = new AbortController();
 
@@ -82,7 +73,7 @@ export default function ProfilePage() {
                     phoneNumber: data.phoneNumber ?? "",
                     email: data.email ?? "",
                     personalDescription: data.personalDescription ?? "",
-                    avatarUrl: data.avatarUrl ?? "",
+                    pictureName: data.picture?.pictureName ?? "", // ✅
                 };
 
                 setProfile(nextProfile);
@@ -103,9 +94,7 @@ export default function ProfilePage() {
         return () => controller.abort();
     }, []);
 
-    // ===== HANDLERS =====
     const enterEdit = () => {
-        // on prend un snapshot AVANT de passer en édition
         snapshotRef.current = profile;
         setIsEditing(true);
     };
@@ -126,10 +115,9 @@ export default function ProfilePage() {
             return;
         }
 
-        // 👉 Si rien n'a changé, on ne fait PAS d'appel backend
         if (isProfileEqual(snapshotRef.current, profile)) {
             setIsEditing(false);
-            setCancelSignal((n) => n + 1); // pour resync le ProfileCard si besoin
+            setCancelSignal((n) => n + 1);
             return;
         }
 
@@ -137,7 +125,16 @@ export default function ProfilePage() {
             setLoading(true);
             setError(null);
 
-            const payload = { ...profile, id: userId };
+            const payload = {
+                firstname: profile.firstname,
+                lastname: profile.lastname,
+                username: profile.username,
+                email: profile.email,
+                phoneNumber: profile.phoneNumber,
+                address: profile.address,
+                personalDescription: profile.personalDescription,
+                picture: profile.pictureName,
+            };
 
             const res = await fetch(`http://localhost:8080/api/users/${userId}`, {
                 method: "PUT",
@@ -170,7 +167,7 @@ export default function ProfilePage() {
                 phoneNumber: updated.phoneNumber ?? "",
                 email: updated.email ?? "",
                 personalDescription: updated.personalDescription ?? "",
-                avatarUrl: updated.avatarUrl ?? "",
+                pictureName: updated.picture?.pictureName ?? "",
             };
 
             setProfile(nextProfile);
@@ -188,10 +185,8 @@ export default function ProfilePage() {
         }
     };
 
-    const handleAvatarFile = (file) => {
-        if (!file) return;
-        const preview = URL.createObjectURL(file);
-        setProfile((prev) => ({ ...prev, avatarUrl: preview }));
+    const handleAvatarSelected = (pictureName) => {
+        setProfile((prev) => ({ ...prev, pictureName }));
     };
 
     return (
@@ -242,7 +237,7 @@ export default function ProfilePage() {
                             isEditing={isEditing}
                             profile={profile}
                             onChange={handleChange}
-                            onAvatarSelected={handleAvatarFile}
+                            onAvatarSelected={handleAvatarSelected}
                             cancelSignal={cancelSignal}
                         />
                     </CardWrapper>
@@ -291,81 +286,50 @@ const CardWrapper = styled.div`
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-
-    @media (min-width: 641px) && (max-width: ${BP.tablet}px) {
-    max-width: 880px;
-}
 `;
 
 const TopBar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  /* Pas de padding horizontal ici pour coller le titre le plus à gauche possible */
-  padding-inline: 0;
-  flex-wrap: nowrap;
-    text-align: left;
-
-  /* TABLETTE & DESKTOP : ligne, titre à gauche, bouton à droite */
-  @media (min-width: ${BP.mobile + 1}px) {
-    flex-direction: row;
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-inline: 0;
+    flex-wrap: nowrap;
 
-    & > button,
-    & > a {
-      width: auto;
-      flex-shrink: 0;
+    @media (max-width: ${BP.mobile}px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-inline: 0.75rem;
+
+        & > button,
+        & > a {
+            width: 100%;
+        }
     }
-  }
-
-  /* MOBILE : colonne + un peu de padding pour respirer */
-  @media (max-width: ${BP.mobile}px) {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-    padding-inline: 0.75rem;
-
-    & > button,
-    & > a {
-      width: 100%;
-    }
-  }
 `;
 
 const Title = styled.h1`
-  color: ${theme.colors.inputDark};
-  font-size: clamp(1.35rem, 3vw, 2rem);
-  line-height: 1.2;
-  font-weight: 700;
-  margin: 0;
-
-  /* prend tout l’espace dispo côté gauche */
-  flex: 1 1 auto;
-  min-width: 0;
-  word-break: break-word;
+    color: ${theme.colors.inputDark};
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.2;
+    font-weight: 700;
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
 `;
 
 const Actions = styled.div`
-  display: flex;
-  gap: 0.75rem;
+    display: flex;
+    gap: 0.75rem;
 
-  /* Tablette et 1024px : deux boutons côte à côte */
-  @media (max-width: ${BP.tablet}px) {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  /* Mobile : les boutons à l'intérieur passent en full width */
-  @media (max-width: ${BP.mobile}px) {
-    & > button {
-      width: 100%;
+    @media (max-width: ${BP.tablet}px) {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
     }
-  }
 `;
-
 

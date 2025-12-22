@@ -81,16 +81,38 @@ const MainContent = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
+
     padding: 2rem;
+    padding-top: calc(2rem + 72px); /* ✅ compense un header fixed */
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+        padding-top: calc(1rem + 72px);
+    }
 `;
+
 
 const SearchBar = styled.div`
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     width: 100%;
-    max-width: 800px;
-    margin-top: 3rem;
+    max-width: 1100px;
+    margin-top: 0.5rem;
+
+    /* MOBILE */
+    @media (max-width: 767px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    /* TABLETTE */
+    @media (min-width: 768px) and (max-width: 1023px) {
+        flex-direction: row;
+        align-items: center;
+        padding: 0 1rem;
+    }
 `;
 
 const StyledTextInput = styled(TextInput)`
@@ -114,8 +136,14 @@ const StyledPrimaryButton = styled(PrimaryButton)`
     border-radius: 50px;
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+
     &:hover {
         background-color: ${theme.colors.inputDark};
+    }
+
+    /* sur mobile: bouton prend toute la largeur */
+    @media (max-width: 768px) {
+        width: 100%;
     }
 `;
 
@@ -136,8 +164,18 @@ const StyledPopularStays = styled.section`
 `;
 
 const CardsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
-  gap: 40px 60px;                        /* espace lignes / colonnes */
+    display: grid;
+    width: 100%;
+    gap: 24px;
+    justify-items: center;
+
+    grid-template-columns: 1fr;
+
+    @media (min-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 `;
 
